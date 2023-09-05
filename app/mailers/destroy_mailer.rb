@@ -1,11 +1,8 @@
 class DestroyMailer < ApplicationMailer
-  def destroy_mail(agenda)
-    #binding.pry
+  def destroy_mail(agenda) #agendas_controller.rbのdestroyアクションの30行目でで定義した@agendaを引数に取る
     @users= agenda.team.members
     @agenda = agenda
-    # email = @user.where(email: email)
 
-      #binding.pry
-      mail to: @users.pluck(:email), subject: "アジェンダが削除されました" #pluckでemailを配列で取得
+    mail to: @users.pluck(:email), subject: "アジェンダが削除されました" #pluckでemailを配列で取得
   end
 end
