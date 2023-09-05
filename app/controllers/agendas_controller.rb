@@ -26,6 +26,9 @@ class AgendasController < ApplicationController
       redirect_to dashboard_path, notice: "アジェンダの削除権限がありません"
     else
       @agenda.destroy
+      ##以下にメール送信処理を記述
+      DestroyMailer.destroy_mail(@agenda).deliver
+  
       redirect_to dashboard_path notice: "アジェンダを削除しました"
     end
   end
