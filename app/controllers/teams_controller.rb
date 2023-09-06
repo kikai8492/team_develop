@@ -1,6 +1,6 @@
 class TeamsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_team, only: %i[show edit update destroy]
+  before_action :set_team, only: %i[show edit update destroy change_admin]
 
   def index
     @teams = Team.all
@@ -8,7 +8,12 @@ class TeamsController < ApplicationController
 
   def show
     @working_team = @team
+    #binding.pry
     change_keep_team(current_user, @team)
+    # if @working_team.owner.id == current_user.id
+      
+
+    # end
   end
 
   def new
@@ -46,6 +51,14 @@ class TeamsController < ApplicationController
   def dashboard
     @team = current_user.keep_team_id ? Team.find(current_user.keep_team_id) : current_user.teams.first
   end
+
+  def change_admin
+    @team.update(owner_id: params[:owner_id])
+    @user = User.find(@team.owner_id)
+    AdminMailer.admin_mail(@user).deliver
+    redirect_to team_path(@team), notice:"権限を#{@user.email}に移譲しました"
+  end
+  
 
   private
 
